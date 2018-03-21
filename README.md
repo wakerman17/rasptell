@@ -41,7 +41,7 @@ We have only one guideline so far for commits in this repo:
 
 Here is some general advice:
 
-- Fetch often! Fetching is safe and does not change your branch, it just checks if changes have been made. Then you can decide if you want to merge/pull those changes into your branch.
+- Fetch often! Fetching is safe and does not change your branch, it just checks if changes have been made to the remote. Then you can decide if you want to merge/pull those changes into your branch (you generally want to).
 - Commit often! Commit messages are great for self documentation.
 - Avoid commiting irrelevant changes! I.e. try to only commit the files that you actually worked on. Use `git status` and follow the instructions to select which files to include in a commit.
 
