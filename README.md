@@ -65,5 +65,5 @@ There are tons of fancy features for pull request, but just a short description 
 
 ### Further reading
 
-- Good and entertaining reading to better understand git: [The Git Parable](http://tom.preston-werner.com/2009/05/19/the-git-parable.html)
-- The difference between fetch and pull: [Fetch vs Pull](https://www.git-tower.com/learn/git/faq/difference-between-git-fetch-git-pull)
+- [The Git Parable](http://tom.preston-werner.com/2009/05/19/the-git-parable.html)
+- [Difference between fetch and pull](https://www.git-tower.com/learn/git/faq/difference-between-git-fetch-git-pull)
