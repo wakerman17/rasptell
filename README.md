@@ -1,5 +1,5 @@
 # rasptell
-Project for KTH course II1302 Projects and Project Methods
+Project for KTH course II1302 Projects and Project Methods.
 
 ## Github workflow
 
@@ -15,7 +15,7 @@ You will probably only need to do this step once.
 
 When you have decided what to start working on, it is time to make a new branch for your work. First, make sure you are on the master branch.
 
-`git chechout master`
+`git checkout master`
 
 Second, fetch any remote changes that might have occurred since last time you fetched.
 
