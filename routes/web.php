@@ -14,3 +14,7 @@
 Route::get('/', 'PagesController@index');
 Route::get('/register', 'PagesController@register');
 Route::get('/control', 'PagesController@control');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
