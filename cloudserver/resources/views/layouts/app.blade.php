@@ -78,5 +78,36 @@
             @yield('content')
         </main>
     </div>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous">
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#lightOn").click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "http://130.237.215.170/indexOn.php",
+                    data: "{}",
+                    success: "success",
+                    dataType: "jsonp",
+                });
+                alert("Light is now on")
+            });
+        });
+        $(document).ready(function() {
+            $("#lightOff").click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "http://130.237.215.170/indexOff.php",
+                    data: "{}",
+                    success: "success",
+                    dataType: "jsonp",
+                });
+                alert("Light is now off")
+            });
+        });
+    </script>
 </body>
 </html>
