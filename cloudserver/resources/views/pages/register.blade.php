@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-  <h1>This is the Register page!</h1>
-  <h3>from here you can register</h1>
+  <h1>Detta är registreringssidan!</h1>
+  <h3>Här kan du registerara dig.</h3>
 @endsection
