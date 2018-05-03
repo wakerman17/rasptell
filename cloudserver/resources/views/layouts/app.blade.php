@@ -93,10 +93,9 @@
                     success: "success",
                     dataType: "jsonp",
                 });
-                alert("Light is now on")
+                $("#lightOn").attr('disabled', 'disabled');
+                $("#lightOff").removeAttr('disabled');
             });
-        });
-        $(document).ready(function() {
             $("#lightOff").click(function() {
                 $.ajax({
                     type: "POST",
@@ -105,7 +104,8 @@
                     success: "success",
                     dataType: "jsonp",
                 });
-                alert("Light is now off")
+                $("#lightOff").attr('disabled', 'disabled');
+                $("#lightOn").removeAttr('disabled');
             });
         });
     </script>
