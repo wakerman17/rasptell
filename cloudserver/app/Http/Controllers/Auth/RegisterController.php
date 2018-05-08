@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use \DateTime;
+
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -39,6 +43,29 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
+	
+	 /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+		/*if (DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->count() == 0) 
+		{
+			DB::table('raspberry')->insert(
+				['ip_address' => $request->input('raspberry_id'), 
+				 'created_at' => date('Y-m-d H:i:s'), 
+				 'updated_at' => date('Y-m-d H:i:s')]
+			);
+		}*/
+		$request->merge(['raspberry_id' => DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->value('id')]);
+        $this->validator($request->all())->validate();
+
+        $this->guard()->login($this->create($request->all()));
+        return redirect($this->redirectPath());
+    }
 
     /**
      * Get a validator for an incoming registration request.
@@ -48,12 +75,14 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+		
+		//echo $array['rasperry_id'] . 'Nothing';
         return Validator::make($data, [
             'name' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users',
             'password' => 'required|string|min:6|max:191|confirmed',
-			'rasperry_id' => 'required|integer|max:10'
-			'admin_level' => 'required|integer|max:10'
+			'raspberry_id' => 'required|integer|max:10',
+			'admin_level' => 'required|integer|max:10',
 			'remember_token' => 'nullable|string|max:100'
         ]);
     }
@@ -70,7 +99,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-			'rasperry_id' => $data['rasperry_id'],
+			'raspberry_id' => $data['raspberry_id'],
 			'admin_level' => $data['admin_level'],
 			'remember_token' => $data['remember_token'],
         ]);
