@@ -15,7 +15,7 @@ class CreateRaspberryTable extends Migration
     {
         Schema::create('raspberry', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('mac_adress')->unique();
+			$table->String('ip_address')->unique();
             $table->timestamps();
         });
     }

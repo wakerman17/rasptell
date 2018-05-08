@@ -15,7 +15,7 @@ class CreateDevicesOfHouseTable extends Migration
     {
         Schema::create('devices_of_house', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('lampName');
+			$table->string('lamp_name');
 			$table->integer('raspberry_id')->unsigned();
 			$table->foreign('raspberry_id')->references('id')->on('raspberry');
             $table->timestamps();
