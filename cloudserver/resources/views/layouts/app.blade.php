@@ -48,8 +48,8 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         @guest
-                            <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                            <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                            <li><a class="nav-link" href="{{ route('login') }}">{{ __('Logga in') }}</a></li>
+                            <li><a class="nav-link" href="{{ route('register') }}">{{ __('Registrera') }}</a></li>
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -60,7 +60,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('Logga ut') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -78,5 +78,36 @@
             @yield('content')
         </main>
     </div>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous">
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#lightOn").click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "http://130.237.215.170/indexOn.php",
+                    data: "{}",
+                    success: "success",
+                    dataType: "jsonp",
+                });
+                $("#lightOn").attr('disabled', 'disabled');
+                $("#lightOff").removeAttr('disabled');
+            });
+            $("#lightOff").click(function() {
+                $.ajax({
+                    type: "POST",
+                    url: "http://130.237.215.170/indexOff.php",
+                    data: "{}",
+                    success: "success",
+                    dataType: "jsonp",
+                });
+                $("#lightOff").attr('disabled', 'disabled');
+                $("#lightOn").removeAttr('disabled');
+            });
+        });
+    </script>
 </body>
 </html>
