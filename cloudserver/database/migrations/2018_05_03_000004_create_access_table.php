@@ -16,9 +16,12 @@ class CreateAccessTable extends Migration
         Schema::create('access', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
 			$table->integer('device_id')->unsigned();
+			$table->primary(['user_id', 'device_id']);
 			$table->foreign('user_id')->references('id')->on('users');
-			$table->foreign('device_id')->references('id')->on('devices_of_house');
+			$table->foreign('device_id')->references('id')->on('device');
+			
             $table->timestamps();
+			
         });
     }
 

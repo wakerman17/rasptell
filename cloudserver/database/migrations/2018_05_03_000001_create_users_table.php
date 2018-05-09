@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
 			$table->integer('raspberry_id')->unsigned();
 			$table->foreign('raspberry_id')->references('id')->on('raspberry');
 			$table->integer('admin_level');
-            $table->rememberToken();
             $table->timestamps();
 			
 			$table->unique(['email', 'password']);
@@ -35,6 +34,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('user');
     }
 }
