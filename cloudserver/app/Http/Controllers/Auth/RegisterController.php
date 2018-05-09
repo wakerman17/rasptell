@@ -52,14 +52,14 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-		/*if (DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->count() == 0) 
+		if (DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->count() == 0) 
 		{
 			DB::table('raspberry')->insert(
 				['ip_address' => $request->input('raspberry_id'), 
 				 'created_at' => date('Y-m-d H:i:s'), 
 				 'updated_at' => date('Y-m-d H:i:s')]
 			);
-		}*/
+		}
 		$request->merge(['raspberry_id' => DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->value('id')]);
         $this->validator($request->all())->validate();
 
@@ -82,8 +82,7 @@ class RegisterController extends Controller
             'email' => 'required|string|email|max:191|unique:users',
             'password' => 'required|string|min:6|max:191|confirmed',
 			'raspberry_id' => 'required|integer|max:10',
-			'admin_level' => 'required|integer|max:10',
-			'remember_token' => 'nullable|string|max:100'
+			'admin_level' => 'required|integer|max:10'
         ]);
     }
 
@@ -101,7 +100,6 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
 			'raspberry_id' => $data['raspberry_id'],
 			'admin_level' => $data['admin_level'],
-			'remember_token' => $data['remember_token'],
         ]);
     }
 }

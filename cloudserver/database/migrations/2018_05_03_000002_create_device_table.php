@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDevicesOfHouseTable extends Migration
+class CreateDeviceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateDevicesOfHouseTable extends Migration
      */
     public function up()
     {
-        Schema::create('devices_of_house', function (Blueprint $table) {
+        Schema::create('device', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('lamp_name');
+			$table->integer('id_in_residence');
+			$table->string('device_name');
 			$table->integer('raspberry_id')->unsigned();
+			$table->unique(array('id', 'id_in_residence'));
 			$table->foreign('raspberry_id')->references('id')->on('raspberry');
             $table->timestamps();
         });
