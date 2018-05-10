@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -23,10 +25,10 @@ class LoginController extends Controller
     /**
      * Where to redirect users after login.
      *
-     * @var string
+     * @param  \Illuminate\Http\Request  $request
      */
-    protected $redirectTo = '/home';
-
+	protected $redirectTo = '/home';
+    
     /**
      * Create a new controller instance.
      *

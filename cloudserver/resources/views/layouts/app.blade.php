@@ -30,7 +30,7 @@
                 </a>
                 @else
                 <a class="navbar-brand" href="{{ url('/home') }}">
-                    {{ config('app.nameg', 'Rasptell control center') }}
+                    {{ config('app.nameg', 'Rasptells kontrollcenter') }}
                 </a>
                 @endguest
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,27 +85,45 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
-            $("#lightOn").click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "http://130.237.215.170/indexOn.php",
-                    data: "{}",
-                    success: "success",
-                    dataType: "jsonp",
-                });
-                $("#lightOn").attr('disabled', 'disabled');
-                $("#lightOff").removeAttr('disabled');
+            $(".lightOn").click(function() {
+				var id = $(this).attr('id');
+				//alert("I am id " + id);
+				var id_residence = document.getElementById(id).value;
+				var ip = document.getElementById('ip-address').value;
+				//alert("I am value " + x);
+				//$(id).click(function() {
+				$.ajax({
+					type: "GET",
+					url: "http://" + ip + "/indexOn.php",
+					data: "id=" + id_residence,
+					success: "success",
+					dataType: "jsonp",
+				});
+				var idn = parseInt(id);
+				//alert("I am id3 " + (idn+1).toString());
+				//$(".lightOn").attr('disabled', 'disabled');
+				//$(".lightOff").removeAttr('disabled');
+				$("#" + (idn).toString()).attr('disabled', 'disabled');
+				$("#" + (idn+1).toString()).removeAttr('disabled');
             });
-            $("#lightOff").click(function() {
-                $.ajax({
-                    type: "POST",
-                    url: "http://130.237.215.170/indexOff.php",
-                    data: "{}",
-                    success: "success",
-                    dataType: "jsonp",
-                });
-                $("#lightOff").attr('disabled', 'disabled');
-                $("#lightOn").removeAttr('disabled');
+            $(".lightOff").click(function() {
+				var id = $(this).attr('id');
+				//alert("I am id2 " + id);
+				var id_residence = document.getElementById(id).value;
+				var ip = document.getElementById('ip-address').value;
+                //$(id).click(function() {
+				$.ajax({
+					type: "GET",
+					url: "http://" + ip + "/indexOff.php",
+					data: "id=" + id_residence,
+					success: "success",
+					dataType: "jsonp",
+				});
+				var idn = parseInt(id);
+				//$(".lightOff").attr('disabled', 'disabled');
+				//$(".lightOn").removeAttr('disabled');
+				$("#" + (idn).toString()).attr('disabled', 'disabled');
+				$("#" + (idn-1).toString()).removeAttr('disabled');
             });
         });
     </script>
