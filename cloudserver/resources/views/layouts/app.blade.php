@@ -55,8 +55,10 @@
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
-
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="{{ route('newRasp') }}">
+                                        {{ __('Ny rasp') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -90,6 +92,7 @@
 				//alert("I am id " + id);
 				var id_residence = document.getElementById(id).value;
 				var ip = document.getElementById('ip-address').value;
+				//ip = 130.237.215.170
 				//alert("I am value " + x);
 				//$(id).click(function() {
 				$.ajax({

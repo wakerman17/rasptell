@@ -59,21 +59,7 @@
                                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
                             </div>
                         </div>
-					
-                        <div class="form-group row">
-                            <label for="raspberry_id" class="col-md-4 col-form-label text-md-right">{{ __('IP-address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="raspberry_id" type="text" class="form-control{{ $errors->has('raspberry_id') ? ' is-invalid' : '' }}" name="raspberry_id" required>
-
-                                @if ($errors->has('raspberry_id'))
-                                    <span class="invalid-feedback">
-                                        <strong>{{ $errors->first('raspberry_id') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
+						
                         <div class="form-group row">
                             <label for="admin_level" class="col-md-4 col-form-label text-md-right">{{ __('admin_level') }}</label>
 

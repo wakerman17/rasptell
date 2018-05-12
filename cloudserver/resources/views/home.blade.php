@@ -5,34 +5,70 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Rasptells kontrollcenter</div>
+                <div class="card-header">Ändra lamporna</div>
                 <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success">
                             {{ session('status') }}
                         </div>
                     @endif
-					@if (count($user_devices) > 0)
-						@for($i = 0; $i < count($user_devices); $i++)
-							<input type="hidden" id="ip-address" value="{{$ip}}">
-							<div class="form-group row mb-0">
-								<div class="col-md-6 offset-md-4">
-									<small>{{$user_devices[$i]->device_name}}  </small>
-									<button type="submit" value="{{$user_devices[$i]->id_in_residence}}" id="<?php if($i === 0) {echo $i;} else {echo $i+1;} ?>" class="lightOn btn btn-primary">
-										{{ __('PÅ') }}
-									</button>
-									<button type="submit" value="{{$user_devices[$i]->id_in_residence}}" id="<?php if($i === 0) {echo $i+1;} else {echo $i+2;} ?>" class="lightOff btn btn-primary">
-										{{ __('AV') }}
-									</button>
-									<br><br>
+					<?php echo "$flag" ?>
+					@if ($flag === 1 || $flag === 4)
+						@if (count($user_devices) > 0)
+						@php ($i=0)
+							@foreach($user_devices as $user_device)
+								<input type="hidden" id="ip-address" value="{{$ip}}">
+								<div class="form-group row mb-0">
+									<div class="col-md-6 offset-md-4">
+										<small>{{$user_device->device_name}}  </small>
+										<button type="submit" value="{{$user_device->id_in_residence}}" id="<?php if($i === 0) {echo $i;} else {echo $i+1;} ?>" class="lightOn btn btn-primary">
+											{{ __('PÅ') }}
+										</button>
+										<button type="submit" value="{{$user_device->id_in_residence}}" id="<?php if($i === 0) {echo $i+1;} else {echo $i+2;} ?>" class="lightOff btn btn-primary">
+											{{ __('AV') }}
+										</button>
+										<br><br>
+									</div>
 								</div>
-							</div>
-						@endfor
-					@else 
-						<small>Du kan inte tända någon lampa. Ledsen {{Auth::user()->name}}</small>
+								@php ($i++)
+							@endforeach
+						@else
+							<small>Du kan inte ändra någon lampa eftersom det finns inga lampor registrerade. Ledsen {{Auth::user()->name}}</small>
+						@endif
 					@endif
-                </div>
-            </div>
+					@if  ($flag === 2)
+						<small>Du kan inte ändra lampa eftersom du inte har någon Raspberry registrerad. Ledsen {{Auth::user()->name}}</small>
+					@endif
+					@if ($flag === 3)
+						<small>Du kan inte ändra någon lampa eftersom du inte valt en av dina raspberrys. Ledsen {{Auth::user()->name}}</small>
+					@endif
+					@if ($flag === 5)
+						<small>Du kan inte ändra någon lampa eftersom det finns inga lampor registrerade. Ledsen {{Auth::user()->name}}</small>
+					@endif
+				</div>
+			</div>
+			@if ($flag === 3 || $flag === 4 || $flag === 5)
+				<div class="card">
+					<div class="card-header">Ändra rasp</div>
+					<div class="card-body">
+						<form method="POST" action="{{ route('severalRasps') }}">
+						@csrf
+							@for($i = 0; $i < count($user_rasp_accesses); $i++)
+								<div class="form-group row mb-0">
+									<div class="col-md-6 offset-md-4">
+										<!--<small>{{$user_rasp_accesses[$i]->ip_address}}  </small>-->
+										<input type="hidden" ></input>
+										<button name="ip_address" type="submit" value="{{$user_rasp_accesses[$i]->ip_address}}" id="<?php echo $i; ?>" class="lightOn btn btn-primary">
+												{{ __($user_rasp_accesses[$i]->ip_address) }}
+										</button>
+										<br><br>
+									</div>
+								</div>
+							@endfor
+						</form>
+					</div>
+				</div>
+			@endif
         </div>
     </div>
 </div>

@@ -14,7 +14,10 @@
 Route::get('/', 'PagesController@index');
 Route::get('/register', 'PagesController@register');
 Route::get('/control', 'PagesController@control');
+Route::get('/newRasp', 'NewRaspController@showNewRaspForm')->name('newRasp');
 
 Auth::routes();
 
+Route::post('/newRasp', 'NewRaspController@register');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/home2', 'HomeController@severalRasps')->name('severalRasps');
