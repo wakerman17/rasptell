@@ -12,7 +12,8 @@
                             {{ session('status') }}
                         </div>
                     @endif
-					<?php echo "$flag" ?>
+					<?php //echo "$flag" 
+					?>
 					@if ($flag === 1 || $flag === 4)
 						@if (count($user_devices) > 0)
 						@php ($i=0)

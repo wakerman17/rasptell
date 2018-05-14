@@ -65,10 +65,18 @@ class NewRaspController extends Controller
 				->where('name', Auth::user()->name)
 				->where('email', Auth::user()->email)
 				->value('id');
-		DB::table('raspberry_for_user')->insert(
-			['user_id' => $user,
-			'raspberry_id' => $raspberry]
-		);
+		$duplicate = 	DB::table('raspberry_for_user')
+						->where('user_id', $user)
+						->where('raspberry_id', $raspberry)
+						->get();
+		if ($duplicate->isEmpty()) 
+		{
+			DB::table('raspberry_for_user')->insert(
+				['user_id' => $user,
+				'raspberry_id' => $raspberry]
+			);
+		}
+		
 		return redirect()->route('home');
     }
 

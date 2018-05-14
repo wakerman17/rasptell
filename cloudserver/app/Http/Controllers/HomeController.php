@@ -27,7 +27,7 @@ class HomeController extends Controller
     {
 		$user = DB::table('users')
 				->where('name', Auth::user()->name)
-				->Where('email', Auth::user()->email)
+				->where('email', Auth::user()->email)
 				->first();
 		$raspberrys = 	DB::table('raspberry_for_user')
 						->where('user_id', $user->id)
@@ -38,16 +38,13 @@ class HomeController extends Controller
 						->where('id', $raspberry->raspberry_id)
 						->first();
 			}
-			echo $raspberrys;
 			$flag = 0;
-			//echo "<script>console.log( 'Debug Objects: " . $rasp . "' );</script>";
 		if (count($rasp) === 1)
 		{
 			$flag = 1;
 			$user_accesses = 	DB::table('access')
 								->where('user_id', $user->id)
 								->get();
-			echo $user->id;
 			$user_devices = array();
 		
 			foreach ($user_accesses as $user_access) {
@@ -109,24 +106,6 @@ class HomeController extends Controller
 				->where('name', Auth::user()->name)
 				->Where('email', Auth::user()->email)
 				->first();
-		//$request->input('ip_address');
-		
-		/*$user_accesses = 	DB::table('access')
-								->where('user_id', $user->id)
-								->get();
-		
-			$user_devices = array();
-		
-			foreach ($user_accesses as $user_access) {
-			$user_devices[] = 	DB::table('device')
-								->where('id', $user_access->device_id)
-								->where('raspberry_id', $rasp->id)
-								->first();
-			}
-			return 	view('/home')
-					->with('user_devices', $user_devices)
-					->with('ip', $request->input('ip_address'))
-					->with('flag', $flag);*/
 		//this users all rasp access
 		$raspberrys = 	DB::table('raspberry_for_user')
 						->where('user_id', $user->id)
@@ -137,12 +116,7 @@ class HomeController extends Controller
 			$user_rasp_accesses[] = 	DB::table('raspberry')
 										->where('id', $raspberry->raspberry_id)
 										->first();
-			echo $raspberry->raspberry_id;
 		}
-		foreach ($user_rasp_accesses as $user_rasp_access) {
-			echo "<br>" . var_dump($user_rasp_access) . "<br>";
-		}
-		//echo $raspberrys;
 		//decided rasp's
 		$my_rasps = array();
 		foreach ($user_rasp_accesses as $user_rasp_access) {
@@ -150,18 +124,11 @@ class HomeController extends Controller
 							->where('id', $user_rasp_access->id)
 							->where('ip_address', $request->input('ip_address'))
 							->first();
-			echo $user_rasp_access->id;
 		}
-		foreach ($my_rasps as $my_rasp) {
-			echo "<br>" . var_dump($my_rasp) . "<br>";
-		}
-		
-		//echo "<script>console.log( 'Debug Objects: " . $rasp . "' );</script>";
 		//this user's all device access
 		$user_accesses = 	DB::table('access')
 							->where('user_id', $user->id)
 							->get();
-		//echo $user->id;
 		$user_devices = array();
 		//the devices
 		foreach ($user_accesses as $user_access) {
@@ -175,16 +142,9 @@ class HomeController extends Controller
 									->where('id', $user_access->device_id)
 									->where('raspberry_id', $my_rasp->id)
 									->first();
-				echo "<br>" . var_dump($user_devices) . "<br>";
 			}
 		}
 		$user_devices = array_filter($user_devices);
-		foreach ($user_devices as $user_device) {
-		}
-		/*if (!in_array(null, $user_devices, true)) {
-			$flag = 5;
-			echo "no!";
-		}*/
 		return 	view('/home')
 				->with('user_rasp_accesses', $user_rasp_accesses)
 				->with('user_devices', $user_devices)
