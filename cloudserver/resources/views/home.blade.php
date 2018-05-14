@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Ändra lamporna</div>
+                <div class="card-header">Ändra enheterna</div>
                 <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success">
@@ -34,17 +34,17 @@
 								@php ($i++)
 							@endforeach
 						@else
-							<small>Du kan inte ändra någon lampa eftersom det finns inga lampor registrerade. Ledsen {{Auth::user()->name}}</small>
+							<small>Du kan inte ändra någon lampa eftersom det finns inga enheterna registrerade. Ledsen {{Auth::user()->name}}</small>
 						@endif
 					@endif
 					@if  ($flag === 2)
-						<small>Du kan inte ändra lampa eftersom du inte har någon Raspberry registrerad. Ledsen {{Auth::user()->name}}</small>
+						<small>Du kan inte ändra enheterna eftersom du inte har någon Raspberry registrerad. Ledsen {{Auth::user()->name}}</small>
 					@endif
 					@if ($flag === 3)
-						<small>Du kan inte ändra någon lampa eftersom du inte valt en av dina raspberrys. Ledsen {{Auth::user()->name}}</small>
+						<small>Du kan inte ändra någon enheterna eftersom du inte valt en av dina raspberrys. Ledsen {{Auth::user()->name}}</small>
 					@endif
 					@if ($flag === 5)
-						<small>Du kan inte ändra någon lampa eftersom det finns inga lampor registrerade. Ledsen {{Auth::user()->name}}</small>
+						<small>Du kan inte ändra någon enheterna eftersom det finns inga lampor registrerade. Ledsen {{Auth::user()->name}}</small>
 					@endif
 				</div>
 			</div>

@@ -25,6 +25,12 @@ class HomeController extends Controller
      */
     public function index()
     {
+		/*
+		$flag = 1 Show only devices
+		$flag = 2 Show error message (no rasps)
+		$flag = 3 Show error message (no devices) and different rasps
+		$flag = 4 Show devices and different rasps
+		*/
 		$user = DB::table('users')
 				->where('name', Auth::user()->name)
 				->where('email', Auth::user()->email)
