@@ -52,7 +52,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-		if (DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->count() == 0) 
+		/*if (DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->count() == 0) 
 		{
 			DB::table('raspberry')->insert(
 				['ip_address' => $request->input('raspberry_id'), 
@@ -60,7 +60,7 @@ class RegisterController extends Controller
 				 'updated_at' => date('Y-m-d H:i:s')]
 			);
 		}
-		$request->merge(['raspberry_id' => DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->value('id')]);
+		$request->merge(['raspberry_id' => DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->value('id')]);*/
         $this->validator($request->all())->validate();
 
         $this->guard()->login($this->create($request->all()));
@@ -75,14 +75,11 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-		
-		//echo $array['rasperry_id'] . 'Nothing';
         return Validator::make($data, [
             'name' => 'required|string|max:191',
-            'email' => 'required|string|email|max:191|unique:users',
+            'email' => 'required|unique:users,email|string|email|max:191|unique:users',
             'password' => 'required|string|min:6|max:191|confirmed',
-			'raspberry_id' => 'required|integer|max:10',
-			'admin_level' => 'required|integer|max:10'
+			'admin_level' => 'required|integer|max:3'
         ]);
     }
 
@@ -98,8 +95,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-			'raspberry_id' => $data['raspberry_id'],
-			'admin_level' => $data['admin_level'],
+			'admin_level' => $data['admin_level']
         ]);
     }
 }

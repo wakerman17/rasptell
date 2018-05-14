@@ -17,13 +17,10 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('email');
+			$table->unique('email');
             $table->string('password');
-			$table->integer('raspberry_id')->unsigned();
-			$table->foreign('raspberry_id')->references('id')->on('raspberry');
 			$table->integer('admin_level');
             $table->timestamps();
-			
-			$table->unique(['email', 'password']);
         });
     }
 

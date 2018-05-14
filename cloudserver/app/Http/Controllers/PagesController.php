@@ -12,8 +12,8 @@ class PagesController extends Controller
     /*public function register(){
       return view('auth/register');
     }*/
-	public function registe(){
-      return view('auth/registe');
+	public function register(){
+      return view('auth/register');
     }
     public function control(){
       return view('pages/control');

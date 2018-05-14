@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Rasptell') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -55,8 +55,10 @@
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
-
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="{{ route('newRasp') }}">
+                                        {{ __('Ny rasp') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -87,11 +89,8 @@
         $(document).ready(function() {
             $(".lightOn").click(function() {
 				var id = $(this).attr('id');
-				//alert("I am id " + id);
 				var id_residence = document.getElementById(id).value;
 				var ip = document.getElementById('ip-address').value;
-				//alert("I am value " + x);
-				//$(id).click(function() {
 				$.ajax({
 					type: "GET",
 					url: "http://" + ip + "/indexOn.php",
@@ -100,18 +99,13 @@
 					dataType: "jsonp",
 				});
 				var idn = parseInt(id);
-				//alert("I am id3 " + (idn+1).toString());
-				//$(".lightOn").attr('disabled', 'disabled');
-				//$(".lightOff").removeAttr('disabled');
 				$("#" + (idn).toString()).attr('disabled', 'disabled');
 				$("#" + (idn+1).toString()).removeAttr('disabled');
             });
             $(".lightOff").click(function() {
 				var id = $(this).attr('id');
-				//alert("I am id2 " + id);
 				var id_residence = document.getElementById(id).value;
 				var ip = document.getElementById('ip-address').value;
-                //$(id).click(function() {
 				$.ajax({
 					type: "GET",
 					url: "http://" + ip + "/indexOff.php",
@@ -120,8 +114,6 @@
 					dataType: "jsonp",
 				});
 				var idn = parseInt(id);
-				//$(".lightOff").attr('disabled', 'disabled');
-				//$(".lightOn").removeAttr('disabled');
 				$("#" + (idn).toString()).attr('disabled', 'disabled');
 				$("#" + (idn-1).toString()).removeAttr('disabled');
             });

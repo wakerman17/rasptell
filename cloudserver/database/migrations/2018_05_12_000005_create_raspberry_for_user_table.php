@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDeviceTable extends Migration
+class CreateRaspberryForUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateDeviceTable extends Migration
      */
     public function up()
     {
-        Schema::create('device', function (Blueprint $table) {
-            $table->increments('id');
-			$table->integer('id_in_residence');
-			$table->string('device_name');
+        Schema::create('raspberry_for_user', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned();
 			$table->integer('raspberry_id')->unsigned();
-			$table->unique(array('id_in_residence', 'raspberry_id'));
+			$table->primary(['user_id', 'raspberry_id']);
+			$table->foreign('user_id')->references('id')->on('users');
 			$table->foreign('raspberry_id')->references('id')->on('raspberry');
+			
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateDeviceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('devices_of_house');
+        Schema::dropIfExists('raspberry_for_user');
     }
 }
