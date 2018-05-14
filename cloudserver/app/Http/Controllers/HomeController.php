@@ -38,9 +38,9 @@ class HomeController extends Controller
 						->where('id', $raspberry->raspberry_id)
 						->first();
 			}
-			$flag = 0;
 		if (count($rasp) === 1)
 		{
+			//Show only devices
 			$flag = 1;
 			$user_accesses = 	DB::table('access')
 								->where('user_id', $user->id)
@@ -60,10 +60,12 @@ class HomeController extends Controller
 		} 
 		if  (count($rasp) === 0) 
 		{
+			//Show error message
 			$flag = 2;
 			return 	view('/home')
 					->with('flag', $flag);
 		} if  (count($rasp) > 1)  {
+			//Show error message and different rasps
 			$flag = 3;
 			$user_rasp_accesses = array();
 			foreach ($raspberrys as $raspberry) {
@@ -76,30 +78,11 @@ class HomeController extends Controller
 					->with('flag', $flag)
 					->with('rasp', $rasp);
 		}
-		/*$ip = 	DB::table('raspberry')
-				->where('id', $user->id)
-				->value('ip_address');
-		$user_accesses = 	DB::table('access')
-							->where('user_id', $user->id)
-							->get();
-		
-		$user_devices = array();
-		
-		foreach ($user_accesses as $user_access) {
-		$user_devices[] = DB::table('device')
-						->where('id', $user_access->device_id)
-						->first();
-		}
-		
-
-		return 	view('/home')
-				->with('user_devices', $user_devices)
-				->with('ip', $ip)
-				->with('raspberrys', $raspberrys);*/
     }
 	
 	public function severalRasps(Request $request)
 	{
+		//Show devices and different rasps
 		$flag = 4;
 		//this user
 		$user = DB::table('users')
