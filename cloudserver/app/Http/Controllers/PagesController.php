@@ -9,10 +9,7 @@ class PagesController extends Controller
     public function index(){
       return view('pages/index');
     }
-    /*public function register(){
-      return view('auth/register');
-    }*/
-	public function register(){
+    public function register(){
       return view('auth/register');
     }
     public function control(){
