@@ -12,11 +12,10 @@
                             {{ session('status') }}
                         </div>
                     @endif
-					<?php //echo "$flag" 
-					?>
+					@php ($i=0)
 					@if ($flag === 1 || $flag === 4)
 						@if (count($user_devices) > 0)
-						@php ($i=0)
+						
 							@foreach($user_devices as $user_device)
 								<input type="hidden" id="ip-address" value="{{$ip}}">
 								<div class="form-group row mb-0">
@@ -54,17 +53,18 @@
 					<div class="card-body">
 						<form method="POST" action="{{ route('severalRasps') }}">
 						@csrf
-							@for($i = 0; $i < count($user_rasp_accesses); $i++)
+						@php ($i*=2)
+							@for($j = 0; $j < count($user_rasp_accesses); $j++)
 								<div class="form-group row mb-0">
 									<div class="col-md-6 offset-md-4">
-										<!--<small>{{$user_rasp_accesses[$i]->ip_address}}  </small>-->
 										<input type="hidden" ></input>
-										<button name="ip_address" type="submit" value="{{$user_rasp_accesses[$i]->ip_address}}" id="<?php echo $i; ?>" class="lightOn btn btn-primary">
-												{{ __($user_rasp_accesses[$i]->ip_address) }}
+										<button name="ip_address" type="submit" value="{{$user_rasp_accesses[$j]->ip_address}}" id="{{ $i }}" class="btn btn-primary">
+												{{ __($user_rasp_accesses[$j]->ip_address) }}
 										</button>
 										<br><br>
 									</div>
 								</div>
+								@php ($i++)
 							@endfor
 						</form>
 					</div>
