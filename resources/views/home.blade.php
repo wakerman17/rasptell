@@ -33,17 +33,17 @@
 								@php ($i++)
 							@endforeach
 						@else
-							<small>Du kan inte ändra någon lampa eftersom det finns inga enheterna registrerade. Ledsen {{Auth::user()->name}}.</small>
+							<small>Du kan inte ändra någon lampa eftersom inga enheter finns registrerade. Ledsen {{Auth::user()->name}}.</small>
 						@endif
 					@endif
 					@if  ($flag === 2)
-						<small>Du kan inte ändra enheterna eftersom du inte har någon Raspberry registrerad. Ledsen {{Auth::user()->name}}.</small>
+						<small>Du kan inte ändra någon enhet eftersom du inte har någon Raspberry registrerad. Ledsen {{Auth::user()->name}}.</small>
 					@endif
 					@if ($flag === 3)
-						<small>Du kan inte ändra någon enheterna eftersom du inte valt en av dina raspberrys. Ledsen {{Auth::user()->name}}.</small>
+						<small>Du kan inte ändra någon enhet eftersom du inte har valt en av dina raspberrys. Ledsen {{Auth::user()->name}}.</small>
 					@endif
 					@if ($flag === 5)
-						<small>Du kan inte ändra någon enheterna eftersom det finns inga lampor registrerade. Ledsen {{Auth::user()->name}}.</small>
+						<small>Du kan inte ändra någon enhet eftersom inga lampor finns registrerade. Ledsen {{Auth::user()->name}}.</small>
 					@endif
 				</div>
 			</div>
