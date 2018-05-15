@@ -93,10 +93,14 @@
 				var ip = document.getElementById('ip-address').value;
 				$.ajax({
 					type: "GET",
-					url: "http://" + ip + "/indexOn.php",
+					//headers: {  'Access-Control-Allow-Origin': * }
+					url: "https://cors-anywhere.herokuapp.com/" + "http://" + ip + "/indexOn.php",
 					data: "id=" + id_residence,
 					success: "success",
-					dataType: "jsonp",
+					timeout: 4000,
+					error: function(xhr, textStatus, errorThrown){
+						alert('on request failed');
+					},
 				});
 				var idn = parseInt(id);
 				$("#" + (idn).toString()).attr('disabled', 'disabled');
@@ -108,10 +112,13 @@
 				var ip = document.getElementById('ip-address').value;
 				$.ajax({
 					type: "GET",
-					url: "http://" + ip + "/indexOff.php",
+					url: "https://cors-anywhere.herokuapp.com/" + "http://" + ip + "/indexOff.php",
 					data: "id=" + id_residence,
 					success: "success",
-					dataType: "jsonp",
+					timeout: 4000,
+					error: function(xhr, textStatus, errorThrown){
+						alert('off request failed');
+					},
 				});
 				var idn = parseInt(id);
 				$("#" + (idn).toString()).attr('disabled', 'disabled');

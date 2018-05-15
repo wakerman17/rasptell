@@ -34,21 +34,21 @@
 								@php ($i++)
 							@endforeach
 						@else
-							<small>Du kan inte ändra någon lampa eftersom det finns inga enheterna registrerade. Ledsen {{Auth::user()->name}}</small>
+							<small>Du kan inte ändra någon lampa eftersom det finns inga enheterna registrerade. Ledsen {{Auth::user()->name}}.</small>
 						@endif
 					@endif
 					@if  ($flag === 2)
-						<small>Du kan inte ändra enheterna eftersom du inte har någon Raspberry registrerad. Ledsen {{Auth::user()->name}}</small>
+						<small>Du kan inte ändra enheterna eftersom du inte har någon Raspberry registrerad. Ledsen {{Auth::user()->name}}.</small>
 					@endif
 					@if ($flag === 3)
-						<small>Du kan inte ändra någon enheterna eftersom du inte valt en av dina raspberrys. Ledsen {{Auth::user()->name}}</small>
+						<small>Du kan inte ändra någon enheterna eftersom du inte valt en av dina raspberrys. Ledsen {{Auth::user()->name}}.</small>
 					@endif
 					@if ($flag === 5)
-						<small>Du kan inte ändra någon enheterna eftersom det finns inga lampor registrerade. Ledsen {{Auth::user()->name}}</small>
+						<small>Du kan inte ändra någon enheterna eftersom det finns inga lampor registrerade. Ledsen {{Auth::user()->name}}.</small>
 					@endif
 				</div>
 			</div>
-			@if ($flag === 3 || $flag === 4 || $flag === 5)
+			@if ($flag === 3 || $flag === 4)
 				<div class="card">
 					<div class="card-header">Ändra rasp</div>
 					<div class="card-body">
