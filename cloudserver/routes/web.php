@@ -20,4 +20,4 @@ Auth::routes();
 
 Route::post('/newRasp', 'NewRaspController@register');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::post('/home2', 'HomeController@severalRasps')->name('severalRasps');
+Route::post('/home', 'HomeController@severalRasps')->name('severalRasps');
