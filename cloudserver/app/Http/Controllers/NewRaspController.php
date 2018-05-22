@@ -26,23 +26,6 @@ class NewRaspController extends Controller
         return view('auth.newRasp');
     }
 	
-	/**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    //protected $redirectTo = '/home';
-	
-	/**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    /*public function __construct()
-    {
-        $this->middleware('guest');
-    }*/
-	
 	 /**
      * Handle a registration request for the application.
      *
@@ -97,16 +80,4 @@ class NewRaspController extends Controller
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-			'ip_address' => $data['ip_address'],
-        ]);
-    }
 }

@@ -52,15 +52,6 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-		/*if (DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->count() == 0) 
-		{
-			DB::table('raspberry')->insert(
-				['ip_address' => $request->input('raspberry_id'), 
-				 'created_at' => date('Y-m-d H:i:s'), 
-				 'updated_at' => date('Y-m-d H:i:s')]
-			);
-		}
-		$request->merge(['raspberry_id' => DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->value('id')]);*/
         $this->validator($request->all())->validate();
 
         $this->guard()->login($this->create($request->all()));
