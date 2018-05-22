@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Rasptell') }}</title>
+    <title>{{ config('app.nameg', 'Rasptell') }}</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -26,7 +26,7 @@
             <div class="container">
               @guest
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.nameg', 'Rasptell') }}
                 </a>
                 @else
                 <a class="navbar-brand" href="{{ url('/home') }}">

@@ -31,7 +31,7 @@ class HomeController extends Controller
 		$flag = 3 Show error message (no devices) and different rasps
 		$flag = 4 Show devices and different rasps
 		*/
-		$user = DB::table('users')
+		$user = DB::table('user')
 				->where('name', Auth::user()->name)
 				->where('email', Auth::user()->email)
 				->first();
@@ -91,7 +91,7 @@ class HomeController extends Controller
 		//Show devices and different rasps
 		$flag = 4;
 		//this user
-		$user = DB::table('users')
+		$user = DB::table('user')
 				->where('name', Auth::user()->name)
 				->Where('email', Auth::user()->email)
 				->first();

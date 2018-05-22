@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Raspberry;
+use App\Raspberry_For_User;
 use Auth;
 use App\Http\Controllers\Controller;
 use \DateTime;
@@ -52,29 +54,31 @@ class NewRaspController extends Controller
 		$this->validator($request->all())->validate();
 		if (DB::table('raspberry')->where('ip_address', $request->input('ip_address'))->count() == 0) 
 		{
-			DB::table('raspberry')->insert(
-				['ip_address' => $request->input('ip_address'), 
-				 'created_at' => date('Y-m-d H:i:s'), 
-				 'updated_at' => date('Y-m-d H:i:s')]
-			);
+			Raspberry::create([
+				'ip_address' => $request->input('ip_address')
+			]);
 		}
+		//get the raspberry
 		$raspberry = 	DB::table('raspberry')
 						->where('ip_address', $request->input('ip_address'))
 						->value('id');
-		$user = DB::table('users')
+		//get the user
+		$user = DB::table('user')
 				->where('name', Auth::user()->name)
 				->where('email', Auth::user()->email)
 				->value('id');
+		//check if this user already had this raspberry
 		$duplicate = 	DB::table('raspberry_for_user')
 						->where('user_id', $user)
 						->where('raspberry_id', $raspberry)
 						->get();
 		if ($duplicate->isEmpty()) 
 		{
-			DB::table('raspberry_for_user')->insert(
-				['user_id' => $user,
-				'raspberry_id' => $raspberry]
-			);
+			//if not insert to table
+			Raspberry_For_User::create([
+				'user_id' => $user,
+				'raspberry_id' => $raspberry
+			]);
 		}
 		
 		return redirect()->route('home');
