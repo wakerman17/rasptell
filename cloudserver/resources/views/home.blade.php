@@ -40,7 +40,7 @@
 								@php ($i++)
 							@endforeach
 						@else
-							<small>Du kan inte ändra någon enhet eftersom det finns ingen enhet registrerad. Ledsen {{Auth::user()->name}}.</small>
+							<small>Du kan inte ändra någon enhet eftersom det finns ingen enhet registrerad på raspberryn med IP-adressen {{$ip}}. Ledsen {{Auth::user()->name}}.</small>
 						@endif
 					@endif
 					@if  ($flag === 2)
