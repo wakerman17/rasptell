@@ -12,7 +12,7 @@
                         @csrf
 					
                         <div class="form-group row">
-                            <label for="ip_address" class="col-md-4 col-form-label text-md-right">{{ __('IP-address') }}</label>
+                            <label for="ip_address" class="col-md-4 col-form-label text-md-right">{{ __('IP-adress') }}</label>
 
                             <div class="col-md-6">
                                 <input id="ip_address" type="text" class="form-control{{ $errors->has('ip_address') ? ' is-invalid' : '' }}" name="ip_address" required>

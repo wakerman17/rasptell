@@ -15,7 +15,7 @@ class CreateDeviceTable extends Migration
     {
         Schema::create('device', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('id_in_residence');
+			$table->integer('id_in_residence')->unsigned();
 			$table->string('device_name');
 			$table->integer('raspberry_id')->unsigned();
 			$table->unique(array('id_in_residence', 'raspberry_id'));
