@@ -17,6 +17,6 @@ Route::get('/newRasp', 'NewRaspController@showNewRaspForm')->name('newRasp');
 
 Auth::routes();
 
-Route::post('/newRasp', 'NewRaspController@register');
+Route::post('/newRasp', 'NewRaspController@registerNewRasp');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/home', 'HomeController@severalRasps')->name('severalRasps');

@@ -57,7 +57,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="{{ route('newRasp') }}">
-                                        {{ __('Ny rasp') }}
+                                        {{ __('Ny Raspberry Pi') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

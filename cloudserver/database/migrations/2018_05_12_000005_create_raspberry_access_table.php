@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAccessTable extends Migration
+class CreateRaspberryAccessTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateAccessTable extends Migration
      */
     public function up()
     {
-        Schema::create('access', function (Blueprint $table) {
+        Schema::create('raspberry_access', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
-			$table->integer('device_id')->unsigned();
-			$table->primary(['user_id', 'device_id']);
+			$table->integer('raspberry_id')->unsigned();
+			$table->primary(['user_id', 'raspberry_id']);
 			$table->foreign('user_id')->references('id')->on('user');
-			$table->foreign('device_id')->references('id')->on('device');
+			$table->foreign('raspberry_id')->references('id')->on('raspberry');
 			
             $table->timestamps();
-			
         });
     }
 
@@ -32,6 +31,6 @@ class CreateAccessTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('access');
+        Schema::dropIfExists('raspberry_access');
     }
 }

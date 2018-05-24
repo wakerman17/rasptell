@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
+use App\Raspberry_Access;
+use App\Raspberry;
+use App\Device_Access;
+use App\Device;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -19,7 +24,7 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * Show the application index and send information about how many raspberries the user have.
      *
      * @return \Illuminate\Http\Response
      */
@@ -27,117 +32,105 @@ class HomeController extends Controller
     {
 		/*
 		$flag = 1 Show only devices
-		$flag = 2 Show error message (no rasps)
-		$flag = 3 Show error message (no devices) and different rasps
+		$flag = 2 Show notice message (no rasps)
+		$flag = 3 Show notice message (no devices) and different rasps
 		$flag = 4 Show devices and different rasps
 		*/
-		$user = DB::table('user')
-				->where('name', Auth::user()->name)
-				->where('email', Auth::user()->email)
-				->first();
-		$raspberrys = 	DB::table('raspberry_for_user')
-						->where('user_id', $user->id)
-						->get();
-		$rasp = array();
-		foreach ($raspberrys as $raspberry) {
-			$rasp[] = 	DB::table('raspberry')
-						->where('id', $raspberry->raspberry_id)
-						->first();
-			}
-		if (count($rasp) === 1)
+		$userID = Auth::id();
+		$raspberries = self::userRasps ($userID);
+		$raspberry_message = session('raspberry_message');
+		if ($raspberry_message === null || $raspberry_message === "")
 		{
-			//Show only devices
+			$raspberry_message = "";
+		}
+		if (count($raspberries) === 1)
+		{
 			$flag = 1;
-			$user_accesses = 	DB::table('access')
-								->where('user_id', $user->id)
-								->get();
+			$raspberry = $raspberries[0];
+			$user_accesses = 	Device_Access::where('user_id', $userID)->get();
 			$user_devices = array();
-		
-			foreach ($user_accesses as $user_access) {
-			$user_devices[] = 	DB::table('device')
-								->where('id', $user_access->device_id)
-								->where('raspberry_id', $rasp[0]->id)
-								->first();
+			foreach ($user_accesses as $user_access) 
+			{
+					
+				$device =	Device::where('id', $user_access->device_id)
+							->where('raspberry_id', $raspberry->id)
+							->first();
+				//If a user has access to devices but not the raspberry
+				if ($device !== null)
+				{
+					$user_devices[] = $device;
+				}
 			}
 			return 	view('/home')
 					->with('user_devices', $user_devices)
-					->with('ip', $rasp[0]->ip_address)
-					->with('flag', $flag);
-		} 
-		if  (count($rasp) === 0) 
+					->with('ip', $raspberry->ip_address)
+					->with('flag', $flag)
+					->with('raspberry_message', $raspberry_message);
+		}
+		if  (count($raspberries) === 0) 
 		{
-			//Show error message
 			$flag = 2;
 			return 	view('/home')
-					->with('flag', $flag);
-		} if  (count($rasp) > 1)  {
-			//Show error message and different rasps
-			$flag = 3;
-			$user_rasp_accesses = array();
-			foreach ($raspberrys as $raspberry) {
-			$user_rasp_accesses[] = 	DB::table('raspberry')
-									->where('id', $raspberry->raspberry_id)
-									->first();
-			}
-			return 	view('/home')
-					->with('user_rasp_accesses', $user_rasp_accesses)
 					->with('flag', $flag)
-					->with('rasp', $rasp);
+					->with('raspberry_message', $raspberry_message);
+		} if  (count($raspberries) > 1)  {
+			$flag = 3;
+			return 	view('/home')
+					->with('raspberries', $raspberries)
+					->with('flag', $flag)
+					->with('raspberry_message', $raspberry_message);
 		}
     }
 	
+	/**
+	 * Show the devices for the decided raspberry
+	 * 
+	 * @param \Illuminate\Http\Request  $request Store the ip-address for the choosen raspberry
+	 * @return \Illuminate\Http\Response The devices the user have access to on this raspberry
+	 */
 	public function severalRasps(Request $request)
 	{
-		//Show devices and different rasps
 		$flag = 4;
-		//this user
-		$user = DB::table('user')
-				->where('name', Auth::user()->name)
-				->Where('email', Auth::user()->email)
-				->first();
-		//this users all rasp access
-		$raspberrys = 	DB::table('raspberry_for_user')
-						->where('user_id', $user->id)
-						->get();
-		$user_rasp_accesses = array();
-		//this users all rasps
-		foreach ($raspberrys as $raspberry) {
-			$user_rasp_accesses[] = 	DB::table('raspberry')
-										->where('id', $raspberry->raspberry_id)
-										->first();
-		}
-		//decided rasp's
-		$my_rasps = array();
-		foreach ($user_rasp_accesses as $user_rasp_access) {
-			$my_rasps[] = 	DB::table('raspberry')
-							->where('id', $user_rasp_access->id)
-							->where('ip_address', $request->input('ip_address'))
-							->first();
-		}
-		//this user's all device access
-		$user_accesses = 	DB::table('access')
-							->where('user_id', $user->id)
-							->get();
+		$userID = Auth::id();
+		$ip = $request->input('ip_address');
+		$raspberries = self::userRasps($userID);
+		$device_accesses = Device_Access::where('user_id', $userID)->get();
+		$decided_raspberryID = Raspberry::where('ip_address', $ip)->value('id');
 		$user_devices = array();
-		//the devices
-		foreach ($user_accesses as $user_access) {
-			foreach ($my_rasps as $my_rasp) {
-				if ($my_rasp == null) 
-				{
-					continue;
-				}
-				
-				$user_devices[] = 	DB::table('device')
-									->where('id', $user_access->device_id)
-									->where('raspberry_id', $my_rasp->id)
-									->first();
+		//with all accesses to the devices and the ID of the decided raspberry, the code checks if the raspberry is
+		//assigned to the current device
+		foreach ($device_accesses as $device_access) 
+		{
+			$device = 	Device::where('id', $device_access->device_id)
+						->where('raspberry_id', $decided_raspberryID)
+						->first();
+			if ($device !== null)
+			{
+				$user_devices[] = $device;
 			}
 		}
-		$user_devices = array_filter($user_devices);
+		
 		return 	view('/home')
-				->with('user_rasp_accesses', $user_rasp_accesses)
+				->with('raspberries', $raspberries)
 				->with('user_devices', $user_devices)
-				->with('ip', $request->input('ip_address'))
+				->with('ip', $ip)
 				->with('flag', $flag);
+	}
+	
+	/**
+	 * Get the user's raspberries
+	 * 
+	 * @param $userID The user's id in the database
+	 * @return This user's raspberries from the database
+	 */
+	private function userRasps ($userID)
+	{
+		$user_rasp_accesses = Raspberry_Access::where('user_id', $userID)->get();
+		$raspberries = array();
+		foreach ($user_rasp_accesses as $user_rasp_access) 
+		{
+			$raspberries[] = Raspberry::find($user_rasp_access->raspberry_id);
+		}
+		return $raspberries;
 	}
 }

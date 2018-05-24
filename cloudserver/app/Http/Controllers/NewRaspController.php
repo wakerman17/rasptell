@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Raspberry;
-use App\Raspberry_For_User;
+use App\Raspberry_Access;
 use Auth;
 use App\Http\Controllers\Controller;
 use \DateTime;
@@ -27,44 +27,41 @@ class NewRaspController extends Controller
     }
 	
 	 /**
-     * Handle a registration request for the application.
+     * Handle a registration for a new raspberry for the application.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request)
+    public function registerNewRasp(Request $request)
     {
 		$this->validator($request->all())->validate();
-		if (DB::table('raspberry')->where('ip_address', $request->input('ip_address'))->count() == 0) 
+		$ip = $request->input('ip_address');
+		if (Raspberry::where('ip_address', $ip)->count() == 0) 
 		{
 			Raspberry::create([
 				'ip_address' => $request->input('ip_address')
 			]);
 		}
-		//get the raspberry
-		$raspberry = 	DB::table('raspberry')
-						->where('ip_address', $request->input('ip_address'))
-						->value('id');
-		//get the user
-		$user = DB::table('user')
-				->where('name', Auth::user()->name)
-				->where('email', Auth::user()->email)
-				->value('id');
-		//check if this user already had this raspberry
-		$duplicate = 	DB::table('raspberry_for_user')
-						->where('user_id', $user)
-						->where('raspberry_id', $raspberry)
-						->get();
-		if ($duplicate->isEmpty()) 
-		{
-			//if not insert to table
-			Raspberry_For_User::create([
-				'user_id' => $user,
-				'raspberry_id' => $raspberry
-			]);
-		}
+		$raspberryID = Raspberry::where('ip_address', $ip)->value('id');
+		$userID = Auth::id();
+		$duplicateRaspberry = 	Raspberry_Access::where('user_id', $userID)
+								->where('raspberry_id', $raspberryID)
+								->first();
 		
-		return redirect()->route('home');
+		if ($duplicateRaspberry === null) 
+		{
+			Raspberry_Access::create([
+				'user_id' => $userID,
+				'raspberry_id' => $raspberryID
+			]);
+			$raspberry_message = "";
+		}
+		else 
+		{
+			$raspberry_message = $ip;
+		}
+		return redirect()	->route('home')
+							->with('raspberry_message', $raspberry_message);
     }
 
     /**
