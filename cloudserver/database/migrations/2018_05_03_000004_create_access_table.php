@@ -17,7 +17,7 @@ class CreateAccessTable extends Migration
             $table->integer('user_id')->unsigned();
 			$table->integer('device_id')->unsigned();
 			$table->primary(['user_id', 'device_id']);
-			$table->foreign('user_id')->references('id')->on('users');
+			$table->foreign('user_id')->references('id')->on('user');
 			$table->foreign('device_id')->references('id')->on('device');
 			
             $table->timestamps();
