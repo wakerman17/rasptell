@@ -16,7 +16,7 @@
 					@php ($i=0)
 					@if  (isset($raspberry_message))
 						@if ($raspberry_message !== "")
-							<big>Du har redan raspberryn med IP-adressen {{$raspberry_message}}</big> 
+							<big>{{$raspberry_message . $ip}}</big> 
 							<br>
 						@endif
 					@endif

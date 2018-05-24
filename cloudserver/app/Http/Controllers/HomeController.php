@@ -39,9 +39,17 @@ class HomeController extends Controller
 		$userID = Auth::id();
 		$raspberries = self::userRasps ($userID);
 		$raspberry_message = session('raspberry_message');
-		if ($raspberry_message === null || $raspberry_message === "")
+		if ($raspberry_message === null)
 		{
 			$raspberry_message = "";
+		} 
+		if (session('ip') !== null) 
+		{
+			$ip = session('ip');
+		}
+		else
+		{
+			$ip = 0;
 		}
 		if (count($raspberries) === 1)
 		{
@@ -61,6 +69,7 @@ class HomeController extends Controller
 					$user_devices[] = $device;
 				}
 			}
+			
 			return 	view('/home')
 					->with('user_devices', $user_devices)
 					->with('ip', $raspberry->ip_address)
@@ -77,6 +86,7 @@ class HomeController extends Controller
 			$flag = 3;
 			return 	view('/home')
 					->with('raspberries', $raspberries)
+					->with('ip', $ip)
 					->with('flag', $flag)
 					->with('raspberry_message', $raspberry_message);
 		}

@@ -54,13 +54,14 @@ class NewRaspController extends Controller
 				'user_id' => $userID,
 				'raspberry_id' => $raspberryID
 			]);
-			$raspberry_message = "";
+			$raspberry_message = "Ny raspberry registrerad med IP-adressen ";
 		}
 		else 
 		{
-			$raspberry_message = $ip;
+			$raspberry_message = "Du har redan en raspberry med IP-adressen ";
 		}
 		return redirect()	->route('home')
+							->with('ip', $ip)
 							->with('raspberry_message', $raspberry_message);
     }
 

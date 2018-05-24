@@ -13,7 +13,7 @@ class Device_Access extends Model
      */
 	protected $fillable = [
         'user_id', 
-		'devic_id'
+		'device_id'
     ];
 	
 	protected $table = 'device_access';
