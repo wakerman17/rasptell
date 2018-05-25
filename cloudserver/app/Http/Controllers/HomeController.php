@@ -57,19 +57,7 @@ class HomeController extends Controller
 			$raspberry = $raspberries[0];
 			$ip_address = $raspberry->ip_address;
 			$decided_raspberry_id = $raspberry->id;
-			$device_accesses = 	Device_Access::where('user_id', $user_id)->get();
-			$user_devices = array();
-			foreach ($device_accesses as $device_access) 
-			{	
-				$device =	Device::where('id', $device_access->device_id)
-							->where('raspberry_id', $decided_raspberry_id)
-							->first();
-				//If a user has access to devices but not the raspberry
-				if ($device !== null)
-				{
-					$user_devices[] = $device;
-				}
-			}
+			$user_devices = self::userDevices($user_id, $ip_address, $decided_raspberry_id);
 			$device_names = array();
 			foreach ($user_devices as $user_device) 
 			{	
@@ -120,22 +108,8 @@ class HomeController extends Controller
 		$user_id = Auth::id();
 		$ip_address = $request->input('ip_address');
 		$raspberries = self::userRaspberries($user_id);
-		$device_accesses = Device_Access::where('user_id', $user_id)->get();
 		$decided_raspberry_id = Raspberry::where('ip_address', $ip_address)->value('id');
-		$user_devices = array();
-		//with all accesses to the devices and the ID of the decided raspberry, the code checks if the raspberry is
-		//assigned to the current device
-		foreach ($device_accesses as $device_access) 
-		{
-			$device = 	Device::where('id', $device_access->device_id)
-						->where('raspberry_id', $decided_raspberry_id)
-						->first();
-			if ($device !== null)
-			{
-				$user_devices[] = $device;
-			}
-		}
-		
+		$user_devices = self::userDevices($user_id, $ip_address, $decided_raspberry_id);
 		$ip_addresses = array();
 		foreach ($raspberries as $raspberry) 
 		{	
@@ -159,6 +133,24 @@ class HomeController extends Controller
 				->with('ip_addresses', $ip_addresses)
 				->with('this_ip', $ip_address)
 				->with('flag', $flag);
+	}
+	
+	private function userDevices($user_id, $ip_address, $decided_raspberry_id)
+	{
+		$device_accesses = Device_Access::where('user_id', $user_id)->get();
+		$user_devices = array();
+		foreach ($device_accesses as $device_access) 
+		{	
+			$device =	Device::where('id', $device_access->device_id)
+						->where('raspberry_id', $decided_raspberry_id)
+						->first();
+			//If a user has access to devices but not the raspberry
+			if ($device !== null)
+			{
+				$user_devices[] = $device;
+			}
+		}
+		return $user_devices;
 	}
 	
 	/**
