@@ -37,31 +37,32 @@ class HomeController extends Controller
 		$flag = 4 Show devices and different rasps
 		*/
 		$user_id = Auth::id();
-		$raspberries = self::userRaspberries($userID);
+		$raspberries = self::userRaspberries($user_id);
 		$new_raspberry_message = session('new_raspberry_message');
 		if ($new_raspberry_message === null)
 		{
 			$new_raspberry_message = "";
 		} 
-		if (session('ip') !== null) 
+		if (session('ip_address') !== null) 
 		{
-			$ip = session('ip');
+			$ip_address = session('ip_address');
 		}
 		else
 		{
-			$ip = 0;
+			$ip_address = 0;
 		}
 		if (count($raspberries) === 1)
 		{
 			$flag = 1;
 			$raspberry = $raspberries[0];
-			$ip = $raspberry->ip_address;
+			$ip_address = $raspberry->ip_address;
+			$decided_raspberry_id = $raspberry->id;
 			$device_accesses = 	Device_Access::where('user_id', $user_id)->get();
 			$user_devices = array();
 			foreach ($device_accesses as $device_access) 
 			{	
 				$device =	Device::where('id', $device_access->device_id)
-							->where('raspberry_id', $raspberry->id)
+							->where('raspberry_id', $decided_raspberry_id)
 							->first();
 				//If a user has access to devices but not the raspberry
 				if ($device !== null)
@@ -83,7 +84,7 @@ class HomeController extends Controller
 			return 	view('/home')
 					->with('device_names', $device_names)
 					->with('id_in_residences', $id_in_residences)
-					->with('this_ip', $ip)
+					->with('this_ip', $ip_address)
 					->with('flag', $flag)
 					->with('new_raspberry_message', $new_raspberry_message);
 		}
@@ -101,7 +102,7 @@ class HomeController extends Controller
 			}
 			return 	view('/home')
 					->with('ip_addresses', $ip_addresses)
-					->with('this_ip', $ip)
+					->with('this_ip', $ip_address)
 					->with('flag', $flag)
 					->with('new_raspberry_message', $new_raspberry_message);
 		}
@@ -117,10 +118,10 @@ class HomeController extends Controller
 	{
 		$flag = 4;
 		$user_id = Auth::id();
-		$ip = $request->input('ip_address');
+		$ip_address = $request->input('ip_address');
 		$raspberries = self::userRaspberries($user_id);
 		$device_accesses = Device_Access::where('user_id', $user_id)->get();
-		$decided_raspberry_id = Raspberry::where('ip_address', $ip)->value('id');
+		$decided_raspberry_id = Raspberry::where('ip_address', $ip_address)->value('id');
 		$user_devices = array();
 		//with all accesses to the devices and the ID of the decided raspberry, the code checks if the raspberry is
 		//assigned to the current device
@@ -156,7 +157,7 @@ class HomeController extends Controller
 				->with('device_names', $device_names)
 				->with('id_in_residences', $id_in_residences)
 				->with('ip_addresses', $ip_addresses)
-				->with('this_ip', $ip)
+				->with('this_ip', $ip_address)
 				->with('flag', $flag);
 	}
 	
