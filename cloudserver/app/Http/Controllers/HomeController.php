@@ -55,6 +55,7 @@ class HomeController extends Controller
 		{
 			$flag = 1;
 			$raspberry = $raspberries[0];
+			$ip = $raspberry->ip_address;
 			$device_accesses = 	Device_Access::where('user_id', $userID)->get();
 			$user_devices = array();
 			foreach ($device_accesses as $device_access) 
