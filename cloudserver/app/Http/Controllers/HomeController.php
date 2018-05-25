@@ -49,7 +49,7 @@ class HomeController extends Controller
 		}
 		else
 		{
-			$ip_address = 0;
+			$ip_address = "";
 		}
 		if (count($raspberries) === 1)
 		{
