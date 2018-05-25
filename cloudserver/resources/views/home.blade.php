@@ -14,11 +14,11 @@
                         </div>
                     @endif
 					@php ($i=0)
-					@if  (isset($raspberry_message))
-						@if ($raspberry_message === "New")
+					@if  (isset($new_raspberry_message))
+						@if (strcmp($new_raspberry_message,"New") === 0)
 							<big>Ny raspberry registrerad med IP-adressen {{$ip}}</big> 
 							<br>
-						@elseif ($raspberry_message === "Same")
+						@elseif (strcmp($new_raspberry_message,"Same") === 0)
 							<big>Du har redan en raspberry med IP-adressen {{$ip}}</big> 
 							<br>
 						@endif
