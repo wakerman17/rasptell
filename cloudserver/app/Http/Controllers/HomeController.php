@@ -59,15 +59,11 @@ class HomeController extends Controller
 			$decided_raspberry_id = $raspberry->id;
 			$user_devices = self::userDevices($user_id, $ip_address, $decided_raspberry_id);
 			$device_names = array();
-			foreach ($user_devices as $user_device) 
-			{	
-				$device_names[] =	$user_device->device_name;
-			}
-			
 			$id_in_residences = array();
 			foreach ($user_devices as $user_device) 
 			{	
-				$id_in_residences[] =	$user_device->id_in_residence;
+				$device_names[] =	$user_device->device_name;
+				$id_in_residences[] = $user_device->id_in_residence;
 			}
 			return 	view('/home')
 					->with('device_names', $device_names)
@@ -117,15 +113,11 @@ class HomeController extends Controller
 		}
 		
 		$device_names = array();
-		foreach ($user_devices as $user_device) 
-		{	
-			$device_names[] =	$user_device->device_name;
-		}
-			
 		$id_in_residences = array();
 		foreach ($user_devices as $user_device) 
 		{	
-			$id_in_residences[] =	$user_device->id_in_residence;
+			$device_names[] =	$user_device->device_name;
+			$id_in_residences[] = $user_device->id_in_residence;
 		}
 		return 	view('/home')
 				->with('device_names', $device_names)
