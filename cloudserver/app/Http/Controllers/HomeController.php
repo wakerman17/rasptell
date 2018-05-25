@@ -68,10 +68,21 @@ class HomeController extends Controller
 					$user_devices[] = $device;
 				}
 			}
+			$device_names = array();
+			foreach ($user_devices as $user_device) 
+			{	
+				$device_names[] =	$user_device->device_name;
+			}
 			
+			$id_in_residences = array();
+			foreach ($user_devices as $user_device) 
+			{	
+				$id_in_residences[] =	$user_device->id_in_residence;
+			}
 			return 	view('/home')
-					->with('user_devices', $user_devices)
-					->with('ip', $raspberry->ip_address)
+					->with('device_names', $device_names)
+					->with('id_in_residences', $id_in_residences)
+					->with('this_ip', $ip)
 					->with('flag', $flag)
 					->with('new_raspberry_message', $new_raspberry_message);
 		}
@@ -82,9 +93,14 @@ class HomeController extends Controller
 					->with('flag', $flag);
 		} if  (count($raspberries) > 1)  {
 			$flag = 3;
+			$ip_addresses = array();
+			foreach ($raspberries as $raspberry) 
+			{	
+				$ip_addresses[] =	$raspberry->ip_address;
+			}
 			return 	view('/home')
-					->with('raspberries', $raspberries)
-					->with('ip', $ip)
+					->with('ip_addresses', $ip_addresses)
+					->with('this_ip', $ip)
 					->with('flag', $flag)
 					->with('new_raspberry_message', $new_raspberry_message);
 		}
@@ -118,10 +134,28 @@ class HomeController extends Controller
 			}
 		}
 		
+		$ip_addresses = array();
+		foreach ($raspberries as $raspberry) 
+		{	
+			$ip_addresses[] =	$raspberry->ip_address;
+		}
+		
+		$device_names = array();
+		foreach ($user_devices as $user_device) 
+		{	
+			$device_names[] =	$user_device->device_name;
+		}
+			
+		$id_in_residences = array();
+		foreach ($user_devices as $user_device) 
+		{	
+			$id_in_residences[] =	$user_device->id_in_residence;
+		}
 		return 	view('/home')
-				->with('raspberries', $raspberries)
-				->with('user_devices', $user_devices)
-				->with('ip', $ip)
+				->with('device_names', $device_names)
+				->with('id_in_residences', $id_in_residences)
+				->with('ip_addresses', $ip_addresses)
+				->with('this_ip', $ip)
 				->with('flag', $flag);
 	}
 	
