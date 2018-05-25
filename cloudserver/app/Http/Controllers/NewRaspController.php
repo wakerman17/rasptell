@@ -42,17 +42,17 @@ class NewRaspController extends Controller
 				'ip_address' => $request->input('ip_address')
 			]);
 		}
-		$raspberryID = Raspberry::where('ip_address', $ip)->value('id');
-		$userID = Auth::id();
-		$duplicateRaspberry = 	Raspberry_Access::where('user_id', $userID)
-								->where('raspberry_id', $raspberryID)
+		$raspberry_id = Raspberry::where('ip_address', $ip)->value('id');
+		$user_id = Auth::id();
+		$duplicateRaspberry = 	Raspberry_Access::where('user_id', $user_id)
+								->where('raspberry_id', $raspberry_id)
 								->first();
 		
 		if ($duplicateRaspberry === null) 
 		{
 			Raspberry_Access::create([
-				'user_id' => $userID,
-				'raspberry_id' => $raspberryID
+				'user_id' => $user_id,
+				'raspberry_id' => $raspberry_id
 			]);
 			$new_raspberry_message = "New";
 		}

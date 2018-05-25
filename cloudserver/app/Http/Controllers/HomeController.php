@@ -36,7 +36,7 @@ class HomeController extends Controller
 		$flag = 3 Show notice message (no devices) and different rasps
 		$flag = 4 Show devices and different rasps
 		*/
-		$userID = Auth::id();
+		$user_id = Auth::id();
 		$raspberries = self::userRaspberries($userID);
 		$new_raspberry_message = session('new_raspberry_message');
 		if ($new_raspberry_message === null)
@@ -56,7 +56,7 @@ class HomeController extends Controller
 			$flag = 1;
 			$raspberry = $raspberries[0];
 			$ip = $raspberry->ip_address;
-			$device_accesses = 	Device_Access::where('user_id', $userID)->get();
+			$device_accesses = 	Device_Access::where('user_id', $user_id)->get();
 			$user_devices = array();
 			foreach ($device_accesses as $device_access) 
 			{	
@@ -116,18 +116,18 @@ class HomeController extends Controller
 	public function severalRasps(Request $request)
 	{
 		$flag = 4;
-		$userID = Auth::id();
+		$user_id = Auth::id();
 		$ip = $request->input('ip_address');
-		$raspberries = self::userRaspberries($userID);
-		$device_accesses = Device_Access::where('user_id', $userID)->get();
-		$decided_raspberryID = Raspberry::where('ip_address', $ip)->value('id');
+		$raspberries = self::userRaspberries($user_id);
+		$device_accesses = Device_Access::where('user_id', $user_id)->get();
+		$decided_raspberry_id = Raspberry::where('ip_address', $ip)->value('id');
 		$user_devices = array();
 		//with all accesses to the devices and the ID of the decided raspberry, the code checks if the raspberry is
 		//assigned to the current device
 		foreach ($device_accesses as $device_access) 
 		{
 			$device = 	Device::where('id', $device_access->device_id)
-						->where('raspberry_id', $decided_raspberryID)
+						->where('raspberry_id', $decided_raspberry_id)
 						->first();
 			if ($device !== null)
 			{
@@ -163,12 +163,12 @@ class HomeController extends Controller
 	/**
 	 * Get the user's raspberries
 	 * 
-	 * @param $userID The user's id in the database
+	 * @param $user_id The user's id in the database
 	 * @return This user's raspberries from the database
 	 */
-	private function userRaspberries ($userID)
+	private function userRaspberries ($user_id)
 	{
-		$user_rasp_accesses = Raspberry_Access::where('user_id', $userID)->get();
+		$user_rasp_accesses = Raspberry_Access::where('user_id', $user_id)->get();
 		$raspberries = array();
 		foreach ($user_rasp_accesses as $user_rasp_access) 
 		{
