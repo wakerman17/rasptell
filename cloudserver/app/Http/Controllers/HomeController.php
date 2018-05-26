@@ -30,12 +30,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-		/*
-		$raspberry_and_device_state = 1 Show notice message (no Raspberry Pis)
-		$raspberry_and_device_state = 2 Show only devices
-		$raspberry_and_device_state = 3 Show notice message (no devices) and different Raspberry Pis
-		$raspberry_and_device_state = 4 Show devices and different Raspberry Pis
-		*/
 		$user_id = Auth::id();
 		$raspberries = self::userRaspberries($user_id);
 		$new_raspberry_message = session('new_raspberry_message');
@@ -53,13 +47,16 @@ class HomeController extends Controller
 		}
 		if (count($raspberries) === 0)
 		{
-			$raspberry_and_device_state = 1;
+			$show_devices = false;
+			$show_raspberries = false;
 			return 	view('/home')
-					->with('raspberry_and_device_state', $raspberry_and_device_state);
+					->with('show_devices', $show_devices)
+					->with('show_raspberries', $show_raspberries);
 		}
 		else if  (count($raspberries) === 1) 
 		{
-			$raspberry_and_device_state = 2;
+			$show_devices = true;
+			$show_raspberries = false;
 			$raspberry = $raspberries[0];
 			$ip_address = $raspberry->ip_address;
 			$decided_raspberry_id = $raspberry->id;
@@ -69,17 +66,20 @@ class HomeController extends Controller
 					->with('device_names', $device_names)
 					->with('id_in_residences', $id_in_residences)
 					->with('this_ip', $ip_address)
-					->with('raspberry_and_device_state', $raspberry_and_device_state)
+					->with('show_devices', $show_devices)
+					->with('show_raspberries', $show_raspberries)
 					->with('new_raspberry_message', $new_raspberry_message);
 		} 
 		else if  (count($raspberries) > 1)  
 		{
-			$raspberry_and_device_state = 3;
+			$show_devices = false;
+			$show_raspberries = true;
 			$ip_addresses = self::getIP_Addresses($raspberries);
 			return 	view('/home')
 					->with('ip_addresses', $ip_addresses)
 					->with('this_ip', $ip_address)
-					->with('raspberry_and_device_state', $raspberry_and_device_state)
+					->with('show_devices', $show_devices)
+					->with('show_raspberries', $show_raspberries)
 					->with('new_raspberry_message', $new_raspberry_message);
 		}
     }
@@ -92,12 +92,21 @@ class HomeController extends Controller
 	 */
 	public function getDevicesWithSeveralRaspberries(Request $request)
 	{
-		$raspberry_and_device_state = 4;
 		$user_id = Auth::id();
 		$ip_address = $request->input('ip_address');
 		$raspberries = self::userRaspberries($user_id);
 		$decided_raspberry_id = Raspberry::where('ip_address', $ip_address)->value('id');
 		$user_devices = self::userDevices($user_id, $decided_raspberry_id);
+		if (count($user_devices) === 0) 
+		{
+			$show_devices = false;
+			$show_raspberries = true;
+		} 
+		else 
+		{
+			$show_devices = true;
+			$show_raspberries = true;
+		}
 		$ip_addresses = self::getIP_Addresses($raspberries);
 		list($device_names, $id_in_residences) = self::getNameAndResidenceID($user_devices);
 		return 	view('/home')
@@ -105,7 +114,8 @@ class HomeController extends Controller
 				->with('id_in_residences', $id_in_residences)
 				->with('ip_addresses', $ip_addresses)
 				->with('this_ip', $ip_address)
-				->with('raspberry_and_device_state', $raspberry_and_device_state);
+				->with('show_devices', $show_devices)
+				->with('show_raspberries', $show_raspberries);
 	}
 	
 	/**
@@ -116,7 +126,7 @@ class HomeController extends Controller
 	 * @return $device_names and $id_in_residences
 	 *
 	 */
-	private function getNameAndResidenceID($user_devices) //severalRasps
+	private function getNameAndResidenceID($user_devices)
 	{
 		$device_names = array();
 		$id_in_residences = array();
@@ -161,7 +171,6 @@ class HomeController extends Controller
 			$device =	Device::where('id', $device_access->device_id)
 						->where('raspberry_id', $decided_raspberry_id)
 						->first();
-			//If a user has access to devices but not the raspberry
 			if ($device !== null)
 			{
 				$user_devices[] = $device;
