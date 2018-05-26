@@ -31,10 +31,10 @@ class HomeController extends Controller
     public function index()
     {
 		/*
-		$flag = 1 Show notice message (no rasps)
-		$flag = 2 Show only devices
-		$flag = 3 Show notice message (no devices) and different rasps
-		$flag = 4 Show devices and different rasps
+		$raspberry_and_device_state = 1 Show notice message (no Raspberry Pis)
+		$raspberry_and_device_state = 2 Show only devices
+		$raspberry_and_device_state = 3 Show notice message (no devices) and different Raspberry Pis
+		$raspberry_and_device_state = 4 Show devices and different Raspberry Pis
 		*/
 		$user_id = Auth::id();
 		$raspberries = self::userRaspberries($user_id);
@@ -53,13 +53,13 @@ class HomeController extends Controller
 		}
 		if (count($raspberries) === 0)
 		{
-			$flag = 1;
+			$raspberry_and_device_state = 1;
 			return 	view('/home')
-					->with('flag', $flag);
+					->with('raspberry_and_device_state', $raspberry_and_device_state);
 		}
 		else if  (count($raspberries) === 1) 
 		{
-			$flag = 2;
+			$raspberry_and_device_state = 2;
 			$raspberry = $raspberries[0];
 			$ip_address = $raspberry->ip_address;
 			$decided_raspberry_id = $raspberry->id;
@@ -69,30 +69,30 @@ class HomeController extends Controller
 					->with('device_names', $device_names)
 					->with('id_in_residences', $id_in_residences)
 					->with('this_ip', $ip_address)
-					->with('flag', $flag)
+					->with('raspberry_and_device_state', $raspberry_and_device_state)
 					->with('new_raspberry_message', $new_raspberry_message);
 		} 
 		else if  (count($raspberries) > 1)  
 		{
-			$flag = 3;
+			$raspberry_and_device_state = 3;
 			$ip_addresses = self::getIP_Addresses($raspberries);
 			return 	view('/home')
 					->with('ip_addresses', $ip_addresses)
 					->with('this_ip', $ip_address)
-					->with('flag', $flag)
+					->with('raspberry_and_device_state', $raspberry_and_device_state)
 					->with('new_raspberry_message', $new_raspberry_message);
 		}
     }
 	
 	/**
-	 * Show the devices for the decided raspberry
+	 * Show the devices for the decided Raspberry Pis
 	 * 
 	 * @param \Illuminate\Http\Request  $request Store the ip-address for the chosen raspberry
 	 * @return \Illuminate\Http\Response The devices the user have access to on this raspberry
 	 */
-	public function severalRasps(Request $request)
+	public function getDevicesWithSeveralRaspberries(Request $request)
 	{
-		$flag = 4;
+		$raspberry_and_device_state = 4;
 		$user_id = Auth::id();
 		$ip_address = $request->input('ip_address');
 		$raspberries = self::userRaspberries($user_id);
@@ -105,7 +105,7 @@ class HomeController extends Controller
 				->with('id_in_residences', $id_in_residences)
 				->with('ip_addresses', $ip_addresses)
 				->with('this_ip', $ip_address)
-				->with('flag', $flag);
+				->with('raspberry_and_device_state', $raspberry_and_device_state);
 	}
 	
 	/**
@@ -116,7 +116,7 @@ class HomeController extends Controller
 	 * @return $device_names and $id_in_residences
 	 *
 	 */
-	private function getNameAndResidenceID($user_devices) 
+	private function getNameAndResidenceID($user_devices) //severalRasps
 	{
 		$device_names = array();
 		$id_in_residences = array();
@@ -176,7 +176,7 @@ class HomeController extends Controller
 	 * @param $user_id The user's id in the database
 	 * @return This user's raspberries from the database
 	 */
-	private function userRaspberries ($user_id)
+	private function userRaspberries($user_id)
 	{
 		$user_rasp_accesses = Raspberry_Access::where('user_id', $user_id)->get();
 		$raspberries = array();

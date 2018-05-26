@@ -19,4 +19,4 @@ Auth::routes();
 
 Route::post('/newRasp', 'NewRaspController@registerNewRasp');
 Route::get('/home', 'HomeController@index')->name('home');
-Route::post('/home', 'HomeController@severalRasps')->name('severalRasps');
+Route::post('/home', 'HomeController@getDevicesWithSeveralRaspberries')->name('getDevicesWithSeveralRaspberries');
