@@ -23,7 +23,7 @@
 							<br>
 						@endif
 					@endif
-					@if ($flag === 1 || $flag === 4)
+					@if ($flag === 2 || $flag === 4)
 						@if (count($device_names) > 0)
 							<p>Du hanterar nu raspberryn med IP-adressen {{$this_ip}}</p>
 							@foreach($id_in_residences as $key => $value)
@@ -48,7 +48,7 @@
 							<small>Du kan inte ändra någon enhet eftersom det finns ingen enhet registrerad på raspberryn med IP-adressen {{$this_ip}}. Ledsen {{Auth::user()->name}}.</small>
 						@endif
 					@endif
-					@if  ($flag === 2)
+					@if  ($flag === 1)
 						<small>Du kan inte ändra enheterna eftersom du inte har någon Raspberry registrerad. Ledsen {{Auth::user()->name}}.</small>
 					@endif
 					@if ($flag === 3)

@@ -31,8 +31,8 @@ class HomeController extends Controller
     public function index()
     {
 		/*
-		$flag = 1 Show only devices
-		$flag = 2 Show notice message (no rasps)
+		$flag = 1 Show notice message (no rasps)
+		$flag = 2 Show only devices
 		$flag = 3 Show notice message (no devices) and different rasps
 		$flag = 4 Show devices and different rasps
 		*/
@@ -51,39 +51,31 @@ class HomeController extends Controller
 		{
 			$ip_address = "";
 		}
-		if (count($raspberries) === 1)
+		if (count($raspberries) === 0)
 		{
 			$flag = 1;
+			return 	view('/home')
+					->with('flag', $flag);
+		}
+		else if  (count($raspberries) === 1) 
+		{
+			$flag = 2;
 			$raspberry = $raspberries[0];
 			$ip_address = $raspberry->ip_address;
 			$decided_raspberry_id = $raspberry->id;
-			$user_devices = self::userDevices($user_id, $ip_address, $decided_raspberry_id);
-			$device_names = array();
-			$id_in_residences = array();
-			foreach ($user_devices as $user_device) 
-			{	
-				$device_names[] =	$user_device->device_name;
-				$id_in_residences[] = $user_device->id_in_residence;
-			}
+			$user_devices = self::userDevices($user_id, $decided_raspberry_id);
+			list($device_names, $id_in_residences) = self::getNameAndResidenceID($user_devices);
 			return 	view('/home')
 					->with('device_names', $device_names)
 					->with('id_in_residences', $id_in_residences)
 					->with('this_ip', $ip_address)
 					->with('flag', $flag)
 					->with('new_raspberry_message', $new_raspberry_message);
-		}
-		if  (count($raspberries) === 0) 
+		} 
+		else if  (count($raspberries) > 1)  
 		{
-			$flag = 2;
-			return 	view('/home')
-					->with('flag', $flag);
-		} if  (count($raspberries) > 1)  {
 			$flag = 3;
-			$ip_addresses = array();
-			foreach ($raspberries as $raspberry) 
-			{	
-				$ip_addresses[] =	$raspberry->ip_address;
-			}
+			$ip_addresses = self::getIP_Addresses($raspberries);
 			return 	view('/home')
 					->with('ip_addresses', $ip_addresses)
 					->with('this_ip', $ip_address)
@@ -105,20 +97,9 @@ class HomeController extends Controller
 		$ip_address = $request->input('ip_address');
 		$raspberries = self::userRaspberries($user_id);
 		$decided_raspberry_id = Raspberry::where('ip_address', $ip_address)->value('id');
-		$user_devices = self::userDevices($user_id, $ip_address, $decided_raspberry_id);
-		$ip_addresses = array();
-		foreach ($raspberries as $raspberry) 
-		{	
-			$ip_addresses[] =	$raspberry->ip_address;
-		}
-		
-		$device_names = array();
-		$id_in_residences = array();
-		foreach ($user_devices as $user_device) 
-		{	
-			$device_names[] =	$user_device->device_name;
-			$id_in_residences[] = $user_device->id_in_residence;
-		}
+		$user_devices = self::userDevices($user_id, $decided_raspberry_id);
+		$ip_addresses = self::getIP_Addresses($raspberries);
+		list($device_names, $id_in_residences) = self::getNameAndResidenceID($user_devices);
 		return 	view('/home')
 				->with('device_names', $device_names)
 				->with('id_in_residences', $id_in_residences)
@@ -127,7 +108,51 @@ class HomeController extends Controller
 				->with('flag', $flag);
 	}
 	
-	private function userDevices($user_id, $ip_address, $decided_raspberry_id)
+	/**
+	 * To use the function right use list($device_names, $id_in_residences) = self::getNameAndResidenceID($user_devices);
+	 * to call method. 
+	 *
+	 * @param user_devices The devices the user has
+	 * @return $device_names and $id_in_residences
+	 *
+	 */
+	private function getNameAndResidenceID($user_devices) 
+	{
+		$device_names = array();
+		$id_in_residences = array();
+		foreach ($user_devices as $user_device) 
+		{	
+			$device_names[] =	$user_device->device_name;
+			$id_in_residences[] = $user_device->id_in_residence;
+		}
+		return array($device_names, $id_in_residences);
+	}
+	
+	/**
+	 * Get the IP-addresses of an array of Raspberry objects
+	 *
+	 * @param raspberries An array of Raspberry objects
+	 * @return ip_addresses int[] 
+	 * 
+	 */
+	private function getIP_Addresses($raspberries) {
+		$ip_addresses = array();
+		foreach ($raspberries as $raspberry) 
+		{	
+			$ip_addresses[] =	$raspberry->ip_address;
+		}
+		return $ip_addresses;
+	}
+	
+	/**
+	 * Get the user's devices on this Raspberry Pi
+	 *
+	 * @param $user_id The id of the user
+	 * @param $decided_raspberry_id The id of the current Raspberry Pi
+	 * @return $user_devices The user's devices on current Raspberry Pi
+	 *
+	 */
+	private function userDevices($user_id, $decided_raspberry_id)
 	{
 		$device_accesses = Device_Access::where('user_id', $user_id)->get();
 		$user_devices = array();
