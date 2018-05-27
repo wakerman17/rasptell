@@ -35,34 +35,34 @@ class NewRaspController extends Controller
     public function registerNewRasp(Request $request)
     {
 		$this->validator($request->all())->validate();
-		$ip = $request->input('ip_address');
-		if (Raspberry::where('ip_address', $ip)->count() == 0) 
+		$ip_address = $request->input('ip_address');
+		if (Raspberry::where('ip_address', $ip_address)->count() == 0) 
 		{
 			Raspberry::create([
 				'ip_address' => $request->input('ip_address')
 			]);
 		}
-		$raspberryID = Raspberry::where('ip_address', $ip)->value('id');
-		$userID = Auth::id();
-		$duplicateRaspberry = 	Raspberry_Access::where('user_id', $userID)
-								->where('raspberry_id', $raspberryID)
+		$raspberry_id = Raspberry::where('ip_address', $ip_address)->value('id');
+		$user_id = Auth::id();
+		$duplicateRaspberry = 	Raspberry_Access::where('user_id', $user_id)
+								->where('raspberry_id', $raspberry_id)
 								->first();
 		
 		if ($duplicateRaspberry === null) 
 		{
 			Raspberry_Access::create([
-				'user_id' => $userID,
-				'raspberry_id' => $raspberryID
+				'user_id' => $user_id,
+				'raspberry_id' => $raspberry_id
 			]);
-			$raspberry_message = "Ny raspberry registrerad med IP-adressen ";
+			$new_raspberry_message = "New";
 		}
 		else 
 		{
-			$raspberry_message = "Du har redan en raspberry med IP-adressen ";
+			$new_raspberry_message = "Same";
 		}
 		return redirect()	->route('home')
-							->with('ip', $ip)
-							->with('raspberry_message', $raspberry_message);
+							->with('ip_address', $ip_address)
+							->with('new_raspberry_message', $new_raspberry_message);
     }
 
     /**

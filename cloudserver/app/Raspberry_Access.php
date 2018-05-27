@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class Raspberry_Access extends Authenticatable
+class Raspberry_Access extends Model
 {
 	/**
      * The attributes that are mass assignable.
