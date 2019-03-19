@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRaspberryForUserTable extends Migration
+class CreateRaspberryAccessTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateRaspberryForUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('raspberry_for_user', function (Blueprint $table) {
+        Schema::create('raspberry_access', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
 			$table->integer('raspberry_id')->unsigned();
 			$table->primary(['user_id', 'raspberry_id']);
-			$table->foreign('user_id')->references('id')->on('users');
+			$table->foreign('user_id')->references('id')->on('user');
 			$table->foreign('raspberry_id')->references('id')->on('raspberry');
 			
             $table->timestamps();
@@ -31,6 +31,6 @@ class CreateRaspberryForUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('raspberry_for_user');
+        Schema::dropIfExists('raspberry_access');
     }
 }

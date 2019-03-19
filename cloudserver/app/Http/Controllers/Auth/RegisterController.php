@@ -52,15 +52,6 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-		/*if (DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->count() == 0) 
-		{
-			DB::table('raspberry')->insert(
-				['ip_address' => $request->input('raspberry_id'), 
-				 'created_at' => date('Y-m-d H:i:s'), 
-				 'updated_at' => date('Y-m-d H:i:s')]
-			);
-		}
-		$request->merge(['raspberry_id' => DB::table('raspberry')->where('ip_address', $request->input('raspberry_id'))->value('id')]);*/
         $this->validator($request->all())->validate();
 
         $this->guard()->login($this->create($request->all()));
@@ -77,7 +68,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|string|max:191',
-            'email' => 'required|unique:users,email|string|email|max:191|unique:users',
+            'email' => 'required|unique:user,email|string|email|max:191',
             'password' => 'required|string|min:6|max:191|confirmed',
 			'admin_level' => 'required|integer|max:3'
         ]);

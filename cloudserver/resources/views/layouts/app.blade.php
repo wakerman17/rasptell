@@ -26,11 +26,11 @@
             <div class="container">
               @guest
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
+                    {{ config('app.name', 'Rasptell') }}
                 </a>
                 @else
                 <a class="navbar-brand" href="{{ url('/home') }}">
-                    {{ config('app.nameg', 'Rasptells kontrollcenter') }}
+                    {{ config('app.name', 'Rasptell')}}s kontrollcenter
                 </a>
                 @endguest
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<a class="dropdown-item" href="{{ route('newRasp') }}">
-                                        {{ __('Ny rasp') }}
+                                        {{ __('Ny Raspberry Pi') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

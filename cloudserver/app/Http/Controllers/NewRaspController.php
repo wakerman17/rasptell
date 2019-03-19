@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Raspberry;
+use App\Raspberry_Access;
 use Auth;
 use App\Http\Controllers\Controller;
 use \DateTime;
@@ -24,60 +26,43 @@ class NewRaspController extends Controller
         return view('auth.newRasp');
     }
 	
-	/**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    //protected $redirectTo = '/home';
-	
-	/**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    /*public function __construct()
-    {
-        $this->middleware('guest');
-    }*/
-	
 	 /**
-     * Handle a registration request for the application.
+     * Handle a registration for a new raspberry for the application.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function register(Request $request)
+    public function registerNewRasp(Request $request)
     {
 		$this->validator($request->all())->validate();
-		if (DB::table('raspberry')->where('ip_address', $request->input('ip_address'))->count() == 0) 
+		$ip_address = $request->input('ip_address');
+		if (Raspberry::where('ip_address', $ip_address)->count() == 0) 
 		{
-			DB::table('raspberry')->insert(
-				['ip_address' => $request->input('ip_address'), 
-				 'created_at' => date('Y-m-d H:i:s'), 
-				 'updated_at' => date('Y-m-d H:i:s')]
-			);
+			Raspberry::create([
+				'ip_address' => $request->input('ip_address')
+			]);
 		}
-		$raspberry = 	DB::table('raspberry')
-						->where('ip_address', $request->input('ip_address'))
-						->value('id');
-		$user = DB::table('users')
-				->where('name', Auth::user()->name)
-				->where('email', Auth::user()->email)
-				->value('id');
-		$duplicate = 	DB::table('raspberry_for_user')
-						->where('user_id', $user)
-						->where('raspberry_id', $raspberry)
-						->get();
-		if ($duplicate->isEmpty()) 
-		{
-			DB::table('raspberry_for_user')->insert(
-				['user_id' => $user,
-				'raspberry_id' => $raspberry]
-			);
-		}
+		$raspberry_id = Raspberry::where('ip_address', $ip_address)->value('id');
+		$user_id = Auth::id();
+		$duplicateRaspberry = 	Raspberry_Access::where('user_id', $user_id)
+								->where('raspberry_id', $raspberry_id)
+								->first();
 		
-		return redirect()->route('home');
+		if ($duplicateRaspberry === null) 
+		{
+			Raspberry_Access::create([
+				'user_id' => $user_id,
+				'raspberry_id' => $raspberry_id
+			]);
+			$new_raspberry_message = "New";
+		}
+		else 
+		{
+			$new_raspberry_message = "Same";
+		}
+		return redirect()	->route('home')
+							->with('ip_address', $ip_address)
+							->with('new_raspberry_message', $new_raspberry_message);
     }
 
     /**
@@ -93,16 +78,4 @@ class NewRaspController extends Controller
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-			'ip_address' => $data['ip_address'],
-        ]);
-    }
 }
